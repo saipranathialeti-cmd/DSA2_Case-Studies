@@ -1,0 +1,159 @@
+import java.util.*;
+
+class WasteBin {
+    int binId;
+    String zone;
+    int fillLevel;
+
+    WasteBin(int binId, String zone, int fillLevel) {
+        this.binId = binId;
+        this.zone = zone;
+        this.fillLevel = fillLevel;
+    }
+
+    @Override
+    public String toString() {
+        return "Bin ID: " + binId +
+               ", Zone: " + zone +
+               ", Fill Level: " + fillLevel + "%";
+    }
+}
+
+public class WasteSense {
+
+    static TreeMap<Integer, WasteBin> bins = new TreeMap<>();
+
+    // Insert
+    static void insertBin(int id, String zone, int fill) {
+        bins.put(id, new WasteBin(id, zone, fill));
+        System.out.println("Bin inserted successfully.");
+    }
+
+    // Search
+    static void searchBin(int id) {
+        WasteBin bin = bins.get(id);
+
+        if (bin != null) {
+            System.out.println("Record Found:");
+            System.out.println(bin);
+        } else {
+            System.out.println("Bin not found.");
+        }
+    }
+
+    // Update
+    static void updateBin(int id, int newFillLevel) {
+        WasteBin bin = bins.get(id);
+
+        if (bin != null) {
+            bin.fillLevel = newFillLevel;
+            System.out.println("Bin updated successfully.");
+        } else {
+            System.out.println("Bin not found.");
+        }
+    }
+
+    // Delete
+    static void deleteBin(int id) {
+        if (bins.remove(id) != null) {
+            System.out.println("Bin deleted successfully.");
+        } else {
+            System.out.println("Bin not found.");
+        }
+    }
+
+    // Range Query
+    static void rangeQuery(int startId, int endId) {
+        System.out.println("Bins between " + startId + " and " + endId + ":");
+
+        for (WasteBin bin : bins.subMap(startId, true, endId, true).values()) {
+            System.out.println(bin);
+        }
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+        int choice;
+
+        do {
+            System.out.println("\n===== WasteSense System =====");
+            System.out.println("1. Insert Bin");
+            System.out.println("2. Search Bin");
+            System.out.println("3. Update Bin");
+            System.out.println("4. Delete Bin");
+            System.out.println("5. Range Query");
+            System.out.println("6. Display All Bins");
+            System.out.println("7. Exit");
+            System.out.print("Enter your choice: ");
+
+            choice = sc.nextInt();
+
+            switch (choice) {
+
+                case 1:
+                    System.out.print("Enter Bin ID: ");
+                    int id = sc.nextInt();
+
+                    sc.nextLine();
+
+                    System.out.print("Enter Zone: ");
+                    String zone = sc.nextLine();
+
+                    System.out.print("Enter Fill Level (%): ");
+                    int fill = sc.nextInt();
+
+                    insertBin(id, zone, fill);
+                    break;
+
+                case 2:
+                    System.out.print("Enter Bin ID to search: ");
+                    searchBin(sc.nextInt());
+                    break;
+
+                case 3:
+                    System.out.print("Enter Bin ID to update: ");
+                    int updateId = sc.nextInt();
+
+                    System.out.print("Enter New Fill Level: ");
+                    int newFill = sc.nextInt();
+
+                    updateBin(updateId, newFill);
+                    break;
+
+                case 4:
+                    System.out.print("Enter Bin ID to delete: ");
+                    deleteBin(sc.nextInt());
+                    break;
+
+                case 5:
+                    System.out.print("Enter Start Bin ID: ");
+                    int start = sc.nextInt();
+
+                    System.out.print("Enter End Bin ID: ");
+                    int end = sc.nextInt();
+
+                    rangeQuery(start, end);
+                    break;
+
+                case 6:
+                    System.out.println("All Bin Records:");
+
+                    for (WasteBin bin : bins.values()) {
+                        System.out.println(bin);
+                    }
+                    break;
+
+                case 7:
+                    System.out.println("Exiting...");
+                    break;
+
+                default:
+                    System.out.println("Invalid Choice!");
+            }
+
+        } while (choice != 7);
+
+        sc.close();
+    }
+}
